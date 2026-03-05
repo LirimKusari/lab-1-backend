@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import fs from "fs";
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoute.js";
 import userRouter from "./routes/userRoute.js";
@@ -11,6 +12,11 @@ import orderRouter from "./routes/orderRoute.js";
 const app = express();
 const port = 4000;
 
+// ensure uploads directory exists for food images
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads", { recursive: true });
+}
+
 //middlewares
 app.use(cors());
 app.use(express.json());
@@ -20,10 +26,9 @@ connectDB();
 
 // api endpoints
 app.use("/api/food", foodRouter);
-// app.use('/images',express.static('uploads'));
+app.use('/images', express.static('uploads'));
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
-
 app.use("/api/order", orderRouter);
 
 app.get("/", (req, res) => {

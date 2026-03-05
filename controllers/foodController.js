@@ -27,18 +27,15 @@ import foodModel from '../models/foodModel.js';
 
 const addFood = async (req, res) => {
   try {
-    // If no file is uploaded
-    // if (!req.file) {
-    //   return res.status(400).json({ success: false, message: "No image uploaded" });
-    // }
-
-    // let image_filename = req.file.filename;
+    console.log("DEBUG req.file:", req.file);
+    const image_filename = req.file ? req.file.filename : "";
+    console.log("DEBUG image_filename:", image_filename);
 
     const food = new foodModel({
       name: req.body.name,
       description: req.body.description,
-      price: req.body.price,
-      // image: image_filename,
+      price: Number(req.body.price),
+      image: image_filename,
       category: req.body.category,
     });
 
